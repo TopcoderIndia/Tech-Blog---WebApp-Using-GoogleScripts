@@ -1,0 +1,117 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+<div class="container">
+		<div class="page-header">
+			<img src="http://d2l7b0usk48cxd.cloudfront.net/prod/66/i/logo.png">
+			<h2>Appirio Jaipur SRM Result</h2>
+		</div>
+	
+
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">Topcoder Handle</h3>
+			</div>
+			<div class="panel-body">
+				<p class="text-center">
+					Enter your topcoder Handle to see your score
+				</p>
+                <form>
+				<div class="row">
+					<div class="col-xs-4"></div>
+					<div class="col-xs-3" class="text-right">
+					  <input type="text" id="txtHandle"  class="form-control" />
+					</div>  
+					<div class="col-xs-5" class="text-left">
+					  <input type="submit" class="btn btn-primary" id="btnSearch" value="Submit" disabled="disabled">
+					</div>  
+				</div>
+                </form>
+			</div>
+		</div>
+		
+        <div class="panel panel-danger" id="divError" style="display:none">
+          <div class="panel-heading">
+            Error
+          </div>
+          <div class="panel-body">
+            <span id="spError"></span>
+          </div>
+        </div>
+        
+        
+		<div class="panel panel-primary" id="divResult" style="display:none">
+			<div class="panel-heading">
+				<h3 class="panel-title">Results</h3>
+			</div>
+			
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-2 text-right">
+						<label>Handle</label>
+					</div>
+					<div class="col-xs-6 text-left" >
+						<span id="spHandle"></span>
+					</div>
+				</div>
+				
+                
+				<div class="row">
+					<div class="col-xs-2 text-right">
+						<label>Rank</label>
+					</div>
+					<div class="col-xs-6 text-left" >
+						<span id="spRank"></span>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-xs-2 text-right">
+						<label>Score</label>
+					</div>
+					<div class="col-xs-6 text-left" >
+						<span id="spScore"></span>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+  </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+  function onSuccess(record) {
+    
+     if(record.success == true) {
+       $("#divResult").show();
+       $("#divError").hide();
+     
+       $("#spScore").html(record.Score);
+       $("#spHandle").html(record.Handle);
+       $("#spRank").html(record.Rank);
+     }
+     else {
+        $("#divResult").hide();
+        $("#divError").show();    
+        $("#spError").html(record.error);
+     }
+  }
+
+  $(document).ready(function(){
+     $("#btnSearch").on("click",function(){
+        google.script.run.withSuccessHandler(onSuccess).retrieveRecord($("#txtHandle").val());     
+        return false;
+     });
+     
+     $("#txtHandle").on("keyup",function(){
+        if ($(this).val() == '') {
+           $("#btnSearch").attr("disabled","disabled");  
+        }
+        else {
+          $("#btnSearch").removeAttr("disabled");
+        }
+     });
+     
+  });
+ 
+</script>
+
